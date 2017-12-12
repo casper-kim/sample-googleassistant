@@ -53,7 +53,7 @@ public class AssistantActivity extends Activity implements Button.OnButtonEventL
     // Peripheral and drivers constants.
     private static final int BUTTON_DEBOUNCE_DELAY_MS = 20;
     // Default on using the Voice Hat on Raspberry Pi 3.
-    private static final boolean USE_VOICEHAT_I2S_DAC = Build.DEVICE.equals(BoardDefaults.DEVICE_RPI3);
+    private static final boolean USE_VOICEHAT_I2S_DAC = false;
 
     // Audio constants.
     private static final String PREF_CURRENT_VOLUME = "current_volume";
@@ -104,6 +104,15 @@ public class AssistantActivity extends Activity implements Button.OnButtonEventL
             if (audioOutputDevice == null) {
                 Log.e(TAG, "failed to found I2S audio output device, using default");
             }
+        }
+
+        audioInputDevice = findAudioDevice(AudioManager.GET_DEVICES_INPUTS, AudioDeviceInfo.TYPE_USB_DEVICE);
+        if (audioInputDevice == null) {
+            Log.e(TAG, "failed to find TYPE_USB_DEVICE audio input device, using default");
+        }
+        audioOutputDevice = findAudioDevice(AudioManager.GET_DEVICES_OUTPUTS, AudioDeviceInfo.TYPE_BLUETOOTH_A2DP);
+        if (audioOutputDevice == null) {
+            Log.e(TAG, "failed to found TYPE_BLUETOOTH_A2DP audio output device, using default");
         }
 
         try {
